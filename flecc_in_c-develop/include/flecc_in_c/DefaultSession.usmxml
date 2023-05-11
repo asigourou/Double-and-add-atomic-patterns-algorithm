@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.8.0_144" class="java.beans.XMLDecoder">
+ <object class="com.ti.uia.host.core.Session$Config">
+  <void property="eventTransport">
+   <object class="com.ti.uia.host.core.Session$Config$Transport" id="Session$Config$Transport0">
+    <void property="type">
+     <string>None</string>
+    </void>
+   </object>
+  </void>
+  <void property="msgTransport">
+   <object class="com.ti.uia.host.core.Session$Config$Transport">
+    <void property="type">
+     <string>None</string>
+    </void>
+   </object>
+  </void>
+ </object>
+<void class="com.ti.uia.host.core.Session$Config$Transport" id="Field0" method="getField">
+ <string>customProperties</string>
+ <void id="Properties0" method="get">
+  <object idref="Session$Config$Transport0"/>
+  <void method="put">
+   <string>Address</string>
+   <string>localhost</string>
+  </void>
+  <void method="put">
+   <string>Port</string>
+   <int>8080</int>
+  </void>
+ </void>
+</void>
+<void idref="Properties0"/>
+</java>

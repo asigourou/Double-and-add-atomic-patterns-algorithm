@@ -1,4 +1,4 @@
-# Double-and-add-atomic-patterns-algorithm-
+# Double-and-add-atomic-patterns-algorithm
 Our software, is an implementation of a kP operation for Elliptic Curves over GF(p) based on the atomicity principle of Rondepierre. 
 The source code is written in the programming language C using the constant run time functions of the open-source library FLECC_IN_C .
 This version of the software loads first the secp256r1 curve and takes specific coordinates of the curve and a 22-bit key as example inputs.

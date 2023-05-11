@@ -11,25 +11,35 @@ This release is intended for developers and researchers interested in implementi
 
 Authors: Alkistis Aikaterini Sigourou, Ievgen Kabin 
 {sigourou, kabin}@ihp-microelectronics.com
+
 IHP—Leibniz-Institut für Innovative Mikroelektronik, 15236 Frankfurt, Germany
+
 Open Source Library: FLECC_IN_C: https://github.com/IAIK/flecc_in_c
 
 This software has been created for reasearch purposes, in the limits of testing the resistance of the algorithm on Side Channel Attacks.
 
 To meet our purpose we have modified the function gfp_mult_two_mont.
+
 /////////////////////////////////////////////  Original Version*   /////////////////////////////////////////
 
 void gfp_mult_two_mont( gfp_t res, const gfp_t a, const gfp_t b, const gfp_prime_data_t *prime_data,gfp_t r_squared) {
+
     gfp_mont_multiply( res, a, b, prime_data );
+    
     gfp_mont_multiply( res, res, prime_data->r_squared, prime_data );
+}
 
 *https://github.com/IAIK/flecc_in_c/blob/develop/src/gfp/gfp_mont.c (last accessed on 27/04/2023)
+
 
 /////////////////////////////////////////////  Our Version  ///////////////////////////////////////////////////
 
 void gfp_mult_two_mont( gfp_t res, const gfp_t a, const gfp_t b, const gfp_prime_data_t *prime_data,gfp_t r_squared) {
+
     gfp_mont_multiply( res, a, b, prime_data );
+    
     gfp_mont_multiply( res, res, r_squared, prime_data );
+}
 
 file : url
 

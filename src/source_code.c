@@ -5,11 +5,11 @@ This version of the software loads first the secp256r1 curve and takes specific 
 In the main function implements the "left-to-right double and add algorithm" based on the atomicity principle,
 where Point Doubling(PD) and Point Addition(PA) functions are constructed by the same sequence of instructions.
 The PD and PA functions are created based on the steps of the algorithm published in Table 2 of the paper:
-"Ievgen Kabin, Zoya Dyka and Peter Langendoerfer: Atomicity and Regularity Principles Do Not Ensure Full Resistance of ECC Designs against Single-Trace Attacks".
+"Ievcr Kabin, Zoya Dyka and Peter Lancrdoerfer: Atomicity and Regularity Principles Do Not Ensure Full Resistance of ECC Designs against Single-Trace Attacks".
 This release is intended for developers and researchers interested in implementing kP operations for Elliptic Curves over GF(p).
 
 
-Authors: Alkistis Aikaterini Sigourou, Ievgen Kabin 
+Authors: Alkistis Aikaterini Sigourou, Ievcr Kabin 
 {sigourou, kabin}@ihp-microelectronics.com
 IHP—Leibniz-Institut für Innovative Mikroelektronik, 15236 Frankfurt, Germany
 Open Source Library: FLECC_IN_C: https://github.com/IAIK/flecc_in_c
@@ -85,16 +85,16 @@ void PointDoubling(gfp_t X1, gfp_t X2, gfp_t X3, gfp_t Z1, gfp_t Z2, gfp_prime_d
      gfp_mult_two_mont(R0, X3, X3, curve_params.prime_data.prime, r_sq);
 
     //OP 2   R2 <- X2 + X2
-    gfp_gen_add(R2, X2, X2,curve_params.prime_data.prime ) ;
+    gfp_cr_add(R2, X2, X2,curve_params.prime_data.prime ) ;
     
     //OP 3   R1 <- X1 - R0
-    gfp_gen_subtract( R1, X1, R0, curve_params.prime_data.prime );
+    gfp_cr_subtract( R1, X1, R0, curve_params.prime_data.prime );
 
     //OP 4   Z1 <- X2 * R2
     gfp_mult_two_mont(Z1, X2, R2, curve_params.prime_data.prime,r_sq);
 
     //OP 5   X2 <- Z1 + Z1
-    gfp_gen_add(X2, Z1, Z1, curve_params.prime_data.prime ) ;
+    gfp_cr_add(X2, Z1, Z1, curve_params.prime_data.prime ) ;
 
     // dummy instructions to match the Point Addition//
     bigint_copy_var(tempR0, R0, curve_params.order_n_data.words );
@@ -107,7 +107,7 @@ void PointDoubling(gfp_t X1, gfp_t X2, gfp_t X3, gfp_t Z1, gfp_t Z2, gfp_prime_d
     
     //OP 8   X1 <- X1 + R0
     // dummy instructions to match the Point Addition//
-    gfp_gen_add(X1, X1, R0, curve_params.prime_data.prime ) ;
+    gfp_cr_add(X1, X1, R0, curve_params.prime_data.prime ) ;
 
     //OP 9   R0 <- R1 * X1
     gfp_mult_two_mont(R0, R1, X1, curve_params.prime_data.prime,r_sq);
@@ -116,25 +116,25 @@ void PointDoubling(gfp_t X1, gfp_t X2, gfp_t X3, gfp_t Z1, gfp_t Z2, gfp_prime_d
     gfp_mult_two_mont(R1, Z1, X2, curve_params.prime_data.prime,r_sq);
     
     //OP 11  X1 <- R0 + R0
-    gfp_gen_add(X1, R0, R0, curve_params.prime_data.prime ) ;
+    gfp_cr_add(X1, R0, R0, curve_params.prime_data.prime ) ;
     
     //OP 12  R0 <- R0 + X1
-    gfp_gen_add(R0, R0, X1, curve_params.prime_data.prime ) ;
+    gfp_cr_add(R0, R0, X1, curve_params.prime_data.prime ) ;
  
     //OP 13  X1 <- R0^2
     gfp_mult_two_mont(X1, R0, R0, curve_params.prime_data.prime,r_sq);
 
     //OP 14  X1 <- X1 - R2
-    gfp_gen_subtract( X1, X1, R2, curve_params.prime_data.prime );
+    gfp_cr_subtract( X1, X1, R2, curve_params.prime_data.prime );
 
     //OP 15  Z1 <- R3^2
     gfp_mult_two_mont(Z1, R3, R3, curve_params.prime_data.prime,r_sq);
 
     //OP 16  X1 <- X1 - R2
-    gfp_gen_subtract( X1, X1, R2, curve_params.prime_data.prime );
+    gfp_cr_subtract( X1, X1, R2, curve_params.prime_data.prime );
  
     //OP 17  R2 <- R2 - X1
-    gfp_gen_subtract( R2, R2, X1, curve_params.prime_data.prime );
+    gfp_cr_subtract( R2, R2, X1, curve_params.prime_data.prime );
  
     //OP 18  Z2 <- Z1 * R3
     gfp_mult_two_mont(Z2, Z1, R3, curve_params.prime_data.prime,r_sq);
@@ -146,7 +146,7 @@ void PointDoubling(gfp_t X1, gfp_t X2, gfp_t X3, gfp_t Z1, gfp_t Z2, gfp_prime_d
     bigint_copy_var(X3, R3, curve_params.order_n_data.words);
  
     //OP 21  X2 <- X2 - R1
-    gfp_gen_subtract( X2, X2, R1, curve_params.prime_data.prime );
+    gfp_cr_subtract( X2, X2, R1, curve_params.prime_data.prime );
  
 }
 
@@ -156,16 +156,16 @@ void PointAddition(gfp_t X1, gfp_t X2, gfp_t X3, gfp_t Z1, gfp_t Z2, gfp_prime_d
     gfp_mult_two_mont(R1, X, Z1, curve_params.prime_data.prime,r_sq);
 
     //OP 2   R2 <- X2 + X2
-    gfp_gen_add( R2, X2, X2, curve_params.prime_data.prime ) ;
+    gfp_cr_add( R2, X2, X2, curve_params.prime_data.prime ) ;
 
     //OP 3   R1 <- R1 - X1
-    gfp_gen_subtract( R1, R1, X1, curve_params.prime_data.prime ) ;
+    gfp_cr_subtract( R1, R1, X1, curve_params.prime_data.prime ) ;
   
     //OP 4   R2 <- R1 * R1
     gfp_mult_two_mont(R2, R1, R1, curve_params.prime_data.prime,r_sq);
     
     //OP 5   R0 <- R2 + R2
-    gfp_gen_add( R0, R2, R2, curve_params.prime_data.prime ) ;
+    gfp_cr_add( R0, R2, R2, curve_params.prime_data.prime ) ;
     bigint_copy_var(tempR0, R0, curve_params.order_n_data.words );
 
     //OP 6   R3 <- X1 * R2
@@ -175,7 +175,7 @@ void PointAddition(gfp_t X1, gfp_t X2, gfp_t X3, gfp_t Z1, gfp_t Z2, gfp_prime_d
     gfp_mult_two_mont(R0, Y, Z2, curve_params.prime_data.prime,r_sq);
    
     //OP 8   Z2 <- Z2 + R0
-    gfp_gen_add( Z2, Z2, tempR0, curve_params.prime_data.prime );
+    gfp_cr_add( Z2, Z2, tempR0, curve_params.prime_data.prime );
        
     //OP 9   Z2 <- R1 * R2
     gfp_mult_two_mont(Z2, R1, R2, curve_params.prime_data.prime,r_sq);
@@ -184,25 +184,25 @@ void PointAddition(gfp_t X1, gfp_t X2, gfp_t X3, gfp_t Z1, gfp_t Z2, gfp_prime_d
     gfp_mult_two_mont(R2, X3, R1, curve_params.prime_data.prime,r_sq);
 
     //OP 11  X1 <- R3 + R3
-    gfp_gen_add(X1, R3, R3, curve_params.prime_data.prime ) ;
+    gfp_cr_add(X1, R3, R3, curve_params.prime_data.prime ) ;
     
     //OP 12  X1 <- Z2 + X1
-    gfp_gen_add(X1, Z2, X1, curve_params.prime_data.prime ) ;
+    gfp_cr_add(X1, Z2, X1, curve_params.prime_data.prime ) ;
        
     //OP 13  Z1 <- X1^2
     gfp_mult_two_mont(Z1, X1, X1, curve_params.prime_data.prime,r_sq);
     
     //OP 14  R0 <- R0 - X2
-    gfp_gen_subtract( R0, R0, X2, curve_params.prime_data.prime );
+    gfp_cr_subtract( R0, R0, X2, curve_params.prime_data.prime );
     
     //OP 15  R1 <- R0^2
     gfp_mult_two_mont(R1, R0, R0, curve_params.prime_data.prime,r_sq);
     
     //OP 16  X1 <- R1 - X1
-    gfp_gen_subtract( X1, R1, X1, curve_params.prime_data.prime );
+    gfp_cr_subtract( X1, R1, X1, curve_params.prime_data.prime );
     
     //OP 17  R1 <- R3 - X1
-    gfp_gen_subtract( R1, R3, X1, curve_params.prime_data.prime );
+    gfp_cr_subtract( R1, R3, X1, curve_params.prime_data.prime );
     
     //OP 18  R3 <- R1 * R0
     gfp_mult_two_mont(R3, R1, R0, curve_params.prime_data.prime,r_sq);
@@ -214,7 +214,7 @@ void PointAddition(gfp_t X1, gfp_t X2, gfp_t X3, gfp_t Z1, gfp_t Z2, gfp_prime_d
     bigint_copy_var( X3, R2, curve_params.order_n_data.words );
     
     //OP 21  X2 <- R3 - R0
-    gfp_gen_subtract( X2, R3, R0, curve_params.prime_data.prime );
+    gfp_cr_subtract( X2, R3, R0, curve_params.prime_data.prime );
    
 }
 
@@ -267,47 +267,47 @@ int main(void)
 
        }
 	   
-	   //Transition to Affinates Coordinates
-	  if (KB[l - 1] == '1') {
+	  //  //Transition to Affinates Coordinates
+	  // if (KB[l - 1] == '1') {
 		  
-		   //X3^2
-           gfp_mult_two_mont(Q0z1, Q0z, Q0z, curve_params.prime_data.prime,r_sq);
-           bigint_copy_var(Q0z1_temp, Q0z1, curve_params.order_n_data.words );	
-		   //X_A = 1/X3^2
-           gfp_binary_euclidean_inverse( X_A, Q0z1_temp, curve_params.prime_data.prime);   
-		   //X_A = X1/X3^2
-           gfp_mult_two_mont(X_A, Q0x, X_A, curve_params.prime_data.prime,r_sq);
+		 //   //X3^2
+   //         gfp_mult_two_mont(Q0z1, Q0z, Q0z, curve_params.prime_data.prime,r_sq);
+   //         bigint_copy_var(Q0z1_temp, Q0z1, curve_params.order_n_data.words );	
+		 //   //X_A = 1/X3^2
+   //         gfp_binary_euclidean_inverse( X_A, Q0z1_temp, curve_params.prime_data.prime);   
+		 //   //X_A = X1/X3^2
+   //         gfp_mult_two_mont(X_A, Q0x, X_A, curve_params.prime_data.prime,r_sq);
 		   
-		   //X3^3
-           gfp_mult_two_mont(Q0z2, Q0z, Q0z1, curve_params.prime_data.prime,r_sq);
-		   //Y_A = 1/X3^3
-           gfp_binary_euclidean_inverse( Y_A, Q0z2, curve_params.prime_data.prime );
-		   //Y_A = X2/X3^2
-           gfp_mult_two_mont(Y_A, Q0y, Y_A, curve_params.prime_data.prime,r_sq);
+		 //   //X3^3
+   //         gfp_mult_two_mont(Q0z2, Q0z, Q0z1, curve_params.prime_data.prime,r_sq);
+		 //   //Y_A = 1/X3^3
+   //         gfp_binary_euclidean_inverse( Y_A, Q0z2, curve_params.prime_data.prime );
+		 //   //Y_A = X2/X3^2
+   //         gfp_mult_two_mont(Y_A, Q0y, Y_A, curve_params.prime_data.prime,r_sq);
            
 		 
-           printf("X_A1: ");
-           io_print_bigint_var(X_A, curve_params.order_n_data.words);
-           printf("Y_A1: ");
-           io_print_bigint_var( Y_A, curve_params.order_n_data.words);
-        }
-        else if (KB[l - 1] == '0') {
+   //         printf("X_A1: ");
+   //         io_print_bigint_var(X_A, curve_params.order_n_data.words);
+   //         printf("Y_A1: ");
+   //         io_print_bigint_var( Y_A, curve_params.order_n_data.words);
+   //      }
+   //      else if (KB[l - 1] == '0') {
 
-		   //X_A = 1/Z1
-           gfp_binary_euclidean_inverse( X_A, Q0z1, curve_params.prime_data.prime);
-		   //X_A = X1/Z1
-           gfp_mult_two_mont(X_A, Q0x, Q0z1, curve_params.prime_data.prime,r_sq);
+		 //   //X_A = 1/Z1
+   //         gfp_binary_euclidean_inverse( X_A, Q0z1, curve_params.prime_data.prime);
+		 //   //X_A = X1/Z1
+   //         gfp_mult_two_mont(X_A, Q0x, Q0z1, curve_params.prime_data.prime,r_sq);
 
-		   //Y_A = 1/Z2
-           gfp_binary_euclidean_inverse( Y_A, Q0z2, curve_params.prime_data.prime);
-		   //Y_A = X2/Z2
-           gfp_mult_two_mont(Y_A, Q0y, Q0z2, curve_params.prime_data.prime,r_sq);
+		 //   //Y_A = 1/Z2
+   //         gfp_binary_euclidean_inverse( Y_A, Q0z2, curve_params.prime_data.prime);
+		 //   //Y_A = X2/Z2
+   //         gfp_mult_two_mont(Y_A, Q0y, Q0z2, curve_params.prime_data.prime,r_sq);
 
-           printf("X_A0: ");
-           io_print_bigint_var(X_A, curve_params.order_n_data.words);
-           printf("Y_A0: ");
-           io_print_bigint_var( Y_A, curve_params.order_n_data.words);
-        }
+   //         printf("X_A0: ");
+   //         io_print_bigint_var(X_A, curve_params.order_n_data.words);
+   //         printf("Y_A0: ");
+   //         io_print_bigint_var( Y_A, curve_params.order_n_data.words);
+   //      }
 
         else printf("Error!\n");
 
